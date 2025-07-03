@@ -1,212 +1,403 @@
-# Spending Tracker iOS App
+# Spending Tracker HK 🏦💰
 
-A comprehensive iOS application for tracking personal expenses with advanced features including bank integration, voice input, analytics, and recurring expense detection.
+A comprehensive React Native spending tracker app designed for Hong Kong users, featuring automatic bank integration via Open Banking APIs, voice input capabilities, and intelligent expense analytics.
 
-## Features
+## 🌟 Features
 
-### 🏦 Bank Integration
-- Connect multiple bank accounts using Plaid API
-- Automatic transaction synchronization
+### 🏦 **Hong Kong Open Banking Integration**
+- Connect multiple bank accounts (HSBC, Bank of China HK, Standard Chartered, etc.)
+- Automatic transaction import and categorization
 - Real-time balance updates
-- Secure data handling
+- Secure OAuth 2.0 authentication with PKCE
+- Support for HKD and multi-currency accounts
 
-### 🎤 Voice Input
-- Add expenses using voice commands
-- Natural language processing for expense details
-- Automatic category detection
-- Hands-free expense entry
+### �️ **Voice Input & AI Processing**
+- Hands-free expense entry using speech recognition
+- Natural language processing to extract amounts, descriptions, and categories
+- Smart parsing of Hong Kong-specific merchants and locations
+- Confidence scoring and automatic form filling
+- Text-to-speech feedback for accessibility
 
-### 📊 Analytics & Insights
-- Interactive charts and visualizations
-- Month-to-month and year-to-year comparisons
-- Spending trends and patterns
-- Smart recommendations and insights
+### 📊 **Advanced Analytics & Insights**
+- Interactive charts showing spending trends
+- Month-over-month and year-over-year comparisons
+- Category breakdown with customizable pie charts
+- Daily, weekly, monthly, and yearly views
+- Intelligent spending insights and budget recommendations
 
-### 🔄 Recurring Expense Detection
-- Automatic detection of recurring patterns
-- Subscription and bill tracking
-- Smart suggestions for recurring expenses
-- Pattern confidence scoring
+### 🔄 **Recurring Expense Detection**
+- Automatic identification of subscription services
+- Pattern recognition for regular bills and payments
+- Confidence-based duplicate detection
+- Proactive notifications for upcoming recurring expenses
 
-### 📱 Modern UI/UX
-- SwiftUI-based modern interface
-- Dark mode support
-- Accessible design
-- Intuitive navigation
+### 📱 **Modern Cross-Platform UI**
+- Built with React Native and Expo for iOS and Android
+- Material Design 3 components via React Native Paper
+- Dark/light theme support
+- Responsive design for phones and tablets
+- Smooth animations and transitions
 
-## Requirements
+### 💾 **Data Management**
+- Local SQLite database for offline functionality
+- CSV import/export capabilities
+- Data backup and restore
+- Seamless sync across devices
 
-- iOS 16.0+
-- Xcode 15.0+
-- Swift 5.9+
+## 🚀 Quick Start
 
-## Installation
+### Prerequisites
 
-1. Clone the repository:
+- Node.js 18+ and npm/yarn
+- Expo CLI: `npm install -g @expo/cli`
+- iOS Simulator (macOS) or Android Studio (for emulators)
+- Expo Go app on your physical device (optional)
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/yourusername/spending-tracker-hk.git
+   cd spending-tracker-hk
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
+
+3. **Set up environment variables**
+   ```bash
+   cp .env.example .env
+   ```
+   
+   Edit `.env` with your Hong Kong Open Banking credentials:
+   ```env
+   EXPO_PUBLIC_HK_OPEN_BANKING_CLIENT_ID=your_client_id_here
+   EXPO_PUBLIC_HK_OPEN_BANKING_CLIENT_SECRET=your_client_secret_here
+   ```
+
+4. **Start the development server**
+   ```bash
+   npx expo start
+   ```
+
+5. **Run on device/emulator**
+   - Press `i` for iOS simulator
+   - Press `a` for Android emulator
+   - Scan QR code with Expo Go app for physical device
+
+## 🏗️ Project Structure
+
+```
+spending-tracker-hk/
+├── App.tsx                     # Main app entry point
+├── app.json                    # Expo configuration
+├── package.json               # Dependencies and scripts
+├── src/
+│   ├── components/            # Reusable UI components
+│   │   ├── DashboardScreen.tsx
+│   │   ├── AddExpenseScreen.tsx
+│   │   ├── AnalyticsScreen.tsx
+│   │   └── SettingsScreen.tsx
+│   ├── services/             # Business logic and APIs
+│   │   ├── DatabaseService.ts
+│   │   ├── HKOpenBankingService.ts
+│   │   └── VoiceInputService.ts
+│   ├── types/                # TypeScript type definitions
+│   │   └── index.ts
+│   └── theme.ts              # App theming and styles
+└── assets/                   # Images, icons, and fonts
+```
+
+## 🏦 Hong Kong Open Banking Setup
+
+### Supported Banks
+- HSBC Hong Kong
+- Bank of China (Hong Kong)
+- Standard Chartered Hong Kong
+- Hang Seng Bank
+- DBS Bank (Hong Kong)
+- Citibank Hong Kong
+
+### Getting API Credentials
+
+1. **Register as a Third Party Provider (TPP)**
+   - Apply through the Hong Kong Monetary Authority (HKMA)
+   - Complete regulatory requirements and testing
+   - Obtain API credentials from participating banks
+
+2. **Development & Testing**
+   - Use sandbox environments provided by each bank
+   - Test with mock accounts and transactions
+   - Validate OAuth 2.0 flows and API integrations
+
+3. **Production Deployment**
+   - Complete security assessments
+   - Obtain production API keys
+   - Implement proper error handling and monitoring
+
+### Configuration
+
+Update `src/services/HKOpenBankingService.ts` with your credentials:
+
+```typescript
+this.config = {
+  clientId: process.env.EXPO_PUBLIC_HK_OPEN_BANKING_CLIENT_ID,
+  clientSecret: process.env.EXPO_PUBLIC_HK_OPEN_BANKING_CLIENT_SECRET,
+  redirectUri: 'spendingtracker://auth/callback',
+  scopes: ['accounts', 'balances', 'transactions'],
+  environment: 'sandbox', // Change to 'production' for live
+};
+```
+
+## 🎙️ Voice Input Configuration
+
+### Speech Recognition Setup
+
+The app uses platform-native speech recognition:
+
+- **iOS**: Apple's SFSpeechRecognizer
+- **Android**: Google Speech Recognition API
+
+### Supported Voice Commands
+
+```
+"I spent 25 dollars on coffee at Starbucks"
+"Paid 150 HKD for groceries at PARKnSHOP"
+"Transportation 45 dollars for taxi"
+"Netflix subscription 99 dollars monthly"
+"Gas station 200 HKD for fuel"
+```
+
+### Customization
+
+Modify `src/services/VoiceInputService.ts` to:
+- Add Hong Kong-specific merchant recognition
+- Support Cantonese voice input
+- Integrate with cloud speech APIs for better accuracy
+
+## 📊 Analytics & Insights
+
+### Chart Types
+- **Line Charts**: Daily spending trends
+- **Pie Charts**: Category breakdowns
+- **Bar Charts**: Monthly comparisons
+- **Heatmaps**: Spending patterns by day/time
+
+### Smart Insights
+- Spending pattern analysis
+- Budget recommendations
+- Unusual spending alerts
+- Recurring expense identification
+
+## 🔧 Customization
+
+### Adding New Categories
+
+Edit the default categories in `src/services/DatabaseService.ts`:
+
+```typescript
+const defaultCategories = [
+  { id: '10', name: 'Dim Sum', icon: 'restaurant', color: '#FF5722', isDefault: 1 },
+  { id: '11', name: 'MTR/Transport', icon: 'train', color: '#607D8B', isDefault: 1 },
+  // Add more Hong Kong-specific categories
+];
+```
+
+### Theme Customization
+
+Modify `src/theme.ts` to match your brand:
+
+```typescript
+export const lightTheme = {
+  ...MD3LightTheme,
+  colors: {
+    ...MD3LightTheme.colors,
+    primary: '#1976D2',      // Your primary color
+    secondary: '#FF9800',    // Your secondary color
+    // Customize other colors
+  },
+};
+```
+
+### Language Localization
+
+The app can be extended to support multiple languages:
+
+1. Install react-native-localize
+2. Create translation files for English, Traditional Chinese, Simplified Chinese
+3. Update UI strings to use translation keys
+
+## 🔒 Security & Privacy
+
+### Data Protection
+- All sensitive data encrypted with AES-256
+- Bank credentials stored in platform secure storage
+- Local SQLite database with encryption
+- No sensitive data transmitted to third-party analytics
+
+### Privacy Compliance
+- GDPR compliant data handling
+- Hong Kong Privacy Ordinance compliance
+- User consent for data collection
+- Right to data deletion and export
+
+### Security Best Practices
+- Certificate pinning for API calls
+- Biometric authentication support
+- Automatic session timeout
+- Secure deep linking for OAuth callbacks
+
+## 🧪 Testing
+
+### Running Tests
 ```bash
-git clone https://github.com/yourusername/spending-tracker.git
-cd spending-tracker
+# Run unit tests
+npm test
+
+# Run with coverage
+npm run test:coverage
+
+# Run E2E tests (requires device/emulator)
+npm run test:e2e
 ```
 
-2. Open the project in Xcode:
+### Test Coverage
+- Unit tests for all services and utilities
+- Integration tests for database operations
+- E2E tests for critical user flows
+- Mock implementations for external APIs
+
+## 📦 Building & Deployment
+
+### Building for Production
+
+1. **iOS Build**
+   ```bash
+   eas build --platform ios
+   ```
+
+2. **Android Build**
+   ```bash
+   eas build --platform android
+   ```
+
+3. **Web Build**
+   ```bash
+   npx expo export:web
+   ```
+
+### App Store Deployment
+
+1. Configure app.json with store metadata
+2. Generate app icons and splash screens
+3. Set up EAS Build and Submit
+4. Follow platform-specific review guidelines
+
+### Environment Configuration
+
+Create environment-specific configurations:
+
 ```bash
-open SpendingTracker.xcodeproj
+# Development
+npx expo start --dev-client
+
+# Staging
+npx expo start --config app.staging.json
+
+# Production
+npx expo start --config app.production.json
 ```
 
-3. Install dependencies (if using SPM):
-   - Charts framework is used for analytics visualizations
-   - Core frameworks: SwiftUI, CoreData, Speech, AVFoundation
+## 🤝 Contributing
 
-4. Configure Plaid API:
-   - Sign up for a Plaid developer account at https://plaid.com/
-   - Replace `your-plaid-api-key` in `BankAPIService.swift` with your actual API key
-   - Update the base URL for sandbox/production environment
+We welcome contributions from the community! Please read our [Contributing Guidelines](CONTRIBUTING.md) for details.
 
-5. Build and run the project
-
-## Configuration
-
-### Plaid Integration
-1. Create a Plaid developer account
-2. Get your API keys (sandbox for development, production for release)
-3. Update `BankAPIService.swift`:
-```swift
-private let apiKey = "your-actual-plaid-api-key"
-private let baseURL = "https://sandbox.plaid.com" // or production.plaid.com
-```
-
-### Permissions
-The app requires the following permissions:
-- **Microphone**: For voice input functionality
-- **Speech Recognition**: For converting speech to text
-
-These permissions are already configured in `Info.plist` with appropriate usage descriptions.
-
-## Architecture
-
-### MVVM Pattern
-- **Views**: SwiftUI views for UI components
-- **ViewModels**: Business logic and state management
-- **Models**: Core Data models and data structures
-- **Services**: External API integrations and utilities
-
-### Core Components
-
-#### Views
-- `ContentView.swift`: Main tab-based navigation
-- `AddExpenseView.swift`: Expense entry with voice input
-- `AnalyticsView.swift`: Charts and spending insights
-- `DashboardView.swift`: Home screen with summaries
-
-#### ViewModels
-- `ExpenseViewModel.swift`: Manages expense data and operations
-
-#### Services
-- `BankAPIService.swift`: Plaid integration for bank connectivity
-- `VoiceInputService.swift`: Speech recognition and processing
-- `RecurringExpenseDetector.swift`: Pattern detection algorithms
-
-#### Models
-- Core Data model with `Expense` entity
-- Supporting structures for charts and analytics
-
-## Features in Detail
-
-### Voice Input
-The app supports natural language voice input for adding expenses:
-
-Examples:
-- "I spent 25 dollars on coffee at Starbucks"
-- "Paid 67 bucks for gas at Shell"
-- "Netflix subscription 15.99"
-
-The system automatically extracts:
-- Amount
-- Description/Title
-- Category (based on keywords)
-
-### Recurring Expense Detection
-The app uses advanced algorithms to detect recurring patterns:
-- String similarity analysis (Levenshtein distance)
-- Temporal pattern recognition
-- Confidence scoring
-- Smart suggestions
-
-### Analytics
-Comprehensive spending analysis including:
-- Daily/Weekly/Monthly/Yearly views
-- Category breakdowns
-- Spending trends
-- Comparison charts
-- Smart insights and recommendations
-
-### Bank Integration
-Secure bank connectivity through Plaid:
-- OAuth-based authentication
-- Read-only access to transaction data
-- Automatic categorization
-- Multiple account support
-
-## Data Security
-
-- All sensitive data is stored locally using Core Data
-- Bank credentials are handled securely through Plaid
-- Voice data is processed locally and not stored
-- No personal data is transmitted to external servers (except Plaid for bank integration)
-
-## Development
-
-### Adding New Features
-1. Create feature branch
-2. Implement following MVVM pattern
-3. Add appropriate tests
-4. Update documentation
-5. Submit pull request
-
-### Code Style
-- Follow Swift API Design Guidelines
-- Use SwiftLint for code formatting
-- Maintain consistent naming conventions
-- Document public APIs
-
-## Contributing
+### Development Workflow
 
 1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
+2. Create a feature branch: `git checkout -b feature/amazing-feature`
+3. Make your changes and add tests
+4. Commit with conventional commits: `git commit -m 'feat: add amazing feature'`
+5. Push to your branch: `git push origin feature/amazing-feature`
+6. Open a Pull Request
 
-## License
+### Code Style
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+We use ESLint and Prettier for code formatting:
 
-## Support
+```bash
+# Check code style
+npm run lint
 
-For support or questions:
-- Create an issue on GitHub
-- Check the documentation
-- Review the code comments
+# Fix auto-fixable issues
+npm run lint:fix
 
-## Roadmap
+# Format code
+npm run format
+```
 
-### Upcoming Features
-- [ ] Budget setting and tracking
-- [ ] Bill payment reminders
-- [ ] Receipt photo capture and OCR
-- [ ] Multi-currency support
-- [ ] Export to various formats (PDF, Excel)
-- [ ] Apple Watch integration
-- [ ] Shared expense tracking
-- [ ] Machine learning for better categorization
+## 📚 Documentation
 
-### Known Issues
-- Mock bank data is used for development
-- Some edge cases in voice processing may need refinement
-- Pattern detection may require tuning for different users
+- [API Documentation](docs/api.md)
+- [Architecture Guide](docs/architecture.md)
+- [Deployment Guide](docs/deployment.md)
+- [Troubleshooting](docs/troubleshooting.md)
 
-## Acknowledgments
+## 🐛 Troubleshooting
 
-- Plaid for banking API integration
-- Apple for SwiftUI and Core frameworks
-- Community contributors and testers
+### Common Issues
+
+**Voice Input Not Working**
+- Check microphone permissions in device settings
+- Ensure internet connection for cloud speech recognition
+- Try restarting the app
+
+**Bank Connection Failed**
+- Verify API credentials are correct
+- Check if bank's API service is operational
+- Ensure redirect URI matches configuration
+
+**App Crashes on Start**
+- Clear app data and cache
+- Reinstall the app
+- Check device compatibility
+
+### Debug Mode
+
+Enable debug logging:
+
+```typescript
+// In App.tsx
+if (__DEV__) {
+  console.log('Debug mode enabled');
+  // Enable additional logging
+}
+```
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- Hong Kong Monetary Authority for Open Banking standards
+- Expo team for the excellent development platform
+- React Native Paper for beautiful UI components
+- The open-source community for amazing libraries
+
+## 📞 Support
+
+- **Email**: support@spendingtracker-hk.com
+- **GitHub Issues**: [Create an issue](https://github.com/yourusername/spending-tracker-hk/issues)
+- **Discord**: [Join our community](https://discord.gg/spendingtracker)
+- **Documentation**: [Full docs](https://docs.spendingtracker-hk.com)
+
+---
+
+**Made with ❤️ for Hong Kong** 🇭🇰
+
+*Spending Tracker HK - Take control of your finances with the power of Open Banking and AI*
